@@ -1,0 +1,4 @@
+import axios from 'axios'
+
+export const api = axios.create({ baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8000', withCredentials: true, headers: { 'Content-Type': 'application/json' } })
+export function apiError(error: unknown) { return axios.isAxiosError(error) ? (error.response?.data?.detail ?? 'The request could not be completed.') : 'The request could not be completed.' }
