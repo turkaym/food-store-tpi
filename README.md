@@ -164,7 +164,7 @@ The final bounded verification record is maintained in `odd/tasks/tp-integrador-
 
 The public links are not available yet and are intentionally left as placeholders:
 
-- Public GitHub repository: `[PLACEHOLDER: add the public GitHub repository URL]`
+- Public GitHub repository: `https://github.com/turkaym/food-store-tpi`
 - Public 10-15 minute video: `[PLACEHOLDER: add the public demonstration video URL]`
 
 ## Delivery Package
