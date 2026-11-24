@@ -48,7 +48,7 @@ class OrderService:
     def create(self, user: Usuario, data: OrderCreate) -> OrderRead:
         product_ids = [item.producto_id for item in data.items]
         if len(product_ids) != len(set(product_ids)):
-            raise HTTPException(409, "A product cannot be repeated in an order")
+            raise HTTPException(400, "A product cannot be repeated in an order")
         with self.uow() as uow:
             order = Pedido(
                 usuario_id=user.id,
@@ -64,9 +64,9 @@ class OrderService:
                 if product is None or not product.activo:
                     raise HTTPException(404, "Product not found")
                 if not product.disponible:
-                    raise HTTPException(409, "Product is not available")
+                    raise HTTPException(400, "Product is not available")
                 if product.stock < requested.cantidad:
-                    raise HTTPException(409, "Insufficient stock")
+                    raise HTTPException(400, "Insufficient stock")
                 product.stock -= requested.cantidad
                 subtotal = product.precio_base * requested.cantidad
                 uow.session.add(DetallePedido(
@@ -105,7 +105,7 @@ class OrderService:
             if order is None:
                 raise HTTPException(404, "Order not found")
             if data.estado not in TRANSITIONS.get(order.estado, set()):
-                raise HTTPException(409, "Invalid order state transition")
+                raise HTTPException(400, "Invalid order state transition")
             if data.estado == "CANCELADO":
                 self._restore_stock(uow, order)
             order.estado = data.estado
@@ -123,7 +123,7 @@ class OrderService:
                 raise HTTPException(403, "Order belongs to another user")
             allowed_states = {"PENDIENTE", "EN_PREPARACION"} if user.role == "admin" else {"PENDIENTE"}
             if order.estado not in allowed_states:
-                raise HTTPException(409, "Order cannot be cancelled from its current state")
+                raise HTTPException(400, "Order cannot be cancelled from its current state")
             self._restore_stock(uow, order)
             order.estado = "CANCELADO"
             order.updated_at = datetime.now(timezone.utc)
