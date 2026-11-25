@@ -1,0 +1,5 @@
+import { PageState, Panel } from '@/shared/components'
+import { money } from '../components/OrderDetails'
+import { useOrderSummary } from '../hooks/useOrders'
+
+export function AdminSummaryPage() { const summary = useOrderSummary(); return <PageState query={summary}><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{summary.data && [['Pending', summary.data.pendientes], ['In preparation', summary.data.en_preparacion], ['Delivered', summary.data.entregados], ['Cancelled', summary.data.cancelados], ['Orders today', summary.data.pedidos_hoy], ['Delivered revenue', money(summary.data.ingresos_entregados)]].map(([label, value]) => <Panel key={String(label)}><p className="text-sm font-semibold text-slate-500">{label}</p><p className="mt-2 text-3xl font-black">{value}</p></Panel>)}</div><Panel><h2 className="text-xl font-black">Today&apos;s operating view</h2><p className="mt-2 text-slate-500">Use the sections above to manage the active catalog, orders, and customer accounts.</p></Panel></PageState> }
