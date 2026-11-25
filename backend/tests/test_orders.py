@@ -1,8 +1,10 @@
 import pytest
 
+from app.core.base_repository import BaseRepository
 from app.core.deps import get_current_user
 from app.main import app
 from app.models import Pedido, Producto, Usuario
+from app.modules.pedidos.repository import OrderRepository
 
 
 def order_payload(product_id: int, quantity: int = 1) -> dict:
@@ -11,6 +13,10 @@ def order_payload(product_id: int, quantity: int = 1) -> dict:
         "forma_pago": "EFECTIVO",
         "direccion_entrega": "Test address",
     }
+
+
+def test_order_repository_uses_base_repository():
+    assert issubclass(OrderRepository, BaseRepository)
 
 
 def test_duplicate_product_returns_400(client, product: Producto):
@@ -108,6 +114,29 @@ def test_schema_validation_remains_422(client, product: Producto):
     response = client.post("/api/v1/pedidos", json=payload)
 
     assert response.status_code == 422
+
+
+@pytest.mark.parametrize(
+    "params",
+    [
+        {"skip": -1},
+        {"limit": 0},
+        {"limit": 101},
+    ],
+)
+def test_list_rejects_invalid_pagination(client, params: dict[str, int]):
+    response = client.get("/api/v1/pedidos", params=params)
+
+    assert response.status_code == 422
+
+
+def test_list_accepts_pagination_boundaries(client):
+    response = client.get(
+        "/api/v1/pedidos",
+        params={"skip": 0, "limit": 100},
+    )
+
+    assert response.status_code == 200
 
 
 def test_order_monetary_calculation_returns_float_values(

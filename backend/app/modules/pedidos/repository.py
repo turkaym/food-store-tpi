@@ -3,12 +3,13 @@ from datetime import datetime, timezone
 from sqlalchemy import func
 from sqlmodel import Session, select
 
+from app.core.base_repository import BaseRepository
 from app.models import Pedido
 
 
-class OrderRepository:
+class OrderRepository(BaseRepository[Pedido]):
     def __init__(self, session: Session):
-        self.session = session
+        super().__init__(session, Pedido)
 
     def list(self, user_id: int | None, skip: int, limit: int, state: str | None) -> tuple[int, list[Pedido]]:
         query = select(Pedido)
@@ -22,9 +23,6 @@ class OrderRepository:
         total = self.session.exec(count_query).one()
         rows = list(self.session.exec(query.order_by(Pedido.created_at.desc()).offset(skip).limit(limit)))
         return total, rows
-
-    def get_by_id(self, order_id: int) -> Pedido | None:
-        return self.session.get(Pedido, order_id)
 
     def summary(self) -> dict[str, int | float]:
         today = datetime.now(timezone.utc).date()

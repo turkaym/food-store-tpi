@@ -5,10 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import create_all_tables
-from app.modules.auth.router import admin_router, router as auth_router
+from app.modules.auth.router import router as auth_router
 from app.modules.categorias.router import router as categories_router
 from app.modules.productos.router import router as products_router
 from app.modules.pedidos.router import router as orders_router
+from app.modules.usuarios.router import router as users_router
 
 
 @asynccontextmanager
@@ -26,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(auth_router, prefix="/api/v1")
-app.include_router(admin_router, prefix="/api/v1")
+app.include_router(users_router, prefix="/api/v1")
 app.include_router(categories_router, prefix="/api/v1")
 app.include_router(products_router, prefix="/api/v1")
 app.include_router(orders_router, prefix="/api/v1")

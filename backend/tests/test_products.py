@@ -1,5 +1,7 @@
 import inspect
 
+import pytest
+
 from app.core.base_repository import BaseRepository
 from app.core.deps import get_current_user
 from app.main import app
@@ -86,6 +88,29 @@ def test_list_searches_filters_and_paginates_with_nested_category(
     assert response.json()["total"] == 1
     assert response.json()["items"][0]["nombre"] == "Spicy Burger"
     assert response.json()["items"][0]["categoria"]["nombre"] == "Meals"
+
+
+@pytest.mark.parametrize(
+    "params",
+    [
+        {"skip": -1},
+        {"limit": 0},
+        {"limit": 101},
+    ],
+)
+def test_list_rejects_invalid_pagination(client, params: dict[str, int]):
+    response = client.get("/api/v1/productos", params=params)
+
+    assert response.status_code == 422
+
+
+def test_list_accepts_pagination_boundaries(client):
+    response = client.get(
+        "/api/v1/productos",
+        params={"skip": 0, "limit": 100},
+    )
+
+    assert response.status_code == 200
 
 
 def test_create_requires_an_active_category(

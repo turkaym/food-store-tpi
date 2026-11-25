@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 
 from app.core.deps import require_role
 from app.models import Usuario
@@ -29,7 +29,7 @@ def translate_product_errors():
 
 
 @router.get("", response_model=ProductPage)
-def list_products(skip: int = 0, limit: int = 20, search: str | None = None, categoria_id: int | None = None, disponible: bool | None = None, service: ProductService = Depends(get_product_service)):
+def list_products(skip: int = Query(default=0, ge=0), limit: int = Query(default=20, ge=1, le=100), search: str | None = None, categoria_id: int | None = None, disponible: bool | None = None, service: ProductService = Depends(get_product_service)):
     return service.list(skip, limit, search, categoria_id, disponible)
 
 
