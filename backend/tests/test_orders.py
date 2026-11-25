@@ -108,3 +108,22 @@ def test_schema_validation_remains_422(client, product: Producto):
     response = client.post("/api/v1/pedidos", json=payload)
 
     assert response.status_code == 422
+
+
+def test_order_monetary_calculation_returns_float_values(
+    client, session_factory, product: Producto
+):
+    with session_factory() as session:
+        stored = session.get(Producto, product.id)
+        stored.precio_base = 0.1
+        session.add(stored)
+        session.commit()
+
+    response = client.post(
+        "/api/v1/pedidos", json=order_payload(product.id, quantity=3)
+    )
+
+    assert response.status_code == 201
+    assert response.json()["total"] == 0.3
+    assert response.json()["items"][0]["precio_unitario"] == 0.1
+    assert response.json()["items"][0]["subtotal"] == 0.3

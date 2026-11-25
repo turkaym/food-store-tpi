@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from decimal import Decimal
 
 from fastapi import HTTPException
 from sqlmodel import select
@@ -58,7 +57,7 @@ class OrderService:
             )
             uow.session.add(order)
             uow.session.flush()
-            total = Decimal("0.00")
+            total = 0.0
             for requested in data.items:
                 product = uow.products.get_by_id(requested.producto_id)
                 if product is None or not product.activo:
@@ -68,7 +67,7 @@ class OrderService:
                 if product.stock < requested.cantidad:
                     raise HTTPException(400, "Insufficient stock")
                 product.stock -= requested.cantidad
-                subtotal = product.precio_base * requested.cantidad
+                subtotal = round(product.precio_base * requested.cantidad, 2)
                 uow.session.add(DetallePedido(
                     pedido_id=order.id,
                     producto_id=product.id,
@@ -77,7 +76,7 @@ class OrderService:
                     precio_unitario=product.precio_base,
                     subtotal=subtotal,
                 ))
-                total += subtotal
+                total = round(total + subtotal, 2)
             order.total = total
             uow.session.flush()
             uow.session.refresh(order)

@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from sqlmodel import Session, select
 
 from app.core.database import create_all_tables, engine
@@ -13,14 +11,14 @@ SEED_CATEGORIES = {
     "Drinks": "Cold and hot drinks",
 }
 SEED_PRODUCTS = [
-    ("Classic Burger", "Burgers", Decimal("8.50")),
-    ("Double Burger", "Burgers", Decimal("11.00")),
-    ("Veggie Burger", "Burgers", Decimal("9.25")),
-    ("Margherita Pizza", "Pizzas", Decimal("10.00")),
-    ("Pepperoni Pizza", "Pizzas", Decimal("12.50")),
-    ("Four Cheese Pizza", "Pizzas", Decimal("13.00")),
-    ("Lemonade", "Drinks", Decimal("3.50")),
-    ("Iced Tea", "Drinks", Decimal("3.00")),
+    ("Classic Burger", "Burgers", 8.50),
+    ("Double Burger", "Burgers", 11.00),
+    ("Veggie Burger", "Burgers", 9.25),
+    ("Margherita Pizza", "Pizzas", 10.00),
+    ("Pepperoni Pizza", "Pizzas", 12.50),
+    ("Four Cheese Pizza", "Pizzas", 13.00),
+    ("Lemonade", "Drinks", 3.50),
+    ("Iced Tea", "Drinks", 3.00),
 ]
 
 

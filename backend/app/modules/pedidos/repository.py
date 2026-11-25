@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from decimal import Decimal
 
 from sqlalchemy import func
 from sqlmodel import Session, select
@@ -27,7 +26,7 @@ class OrderRepository:
     def get_by_id(self, order_id: int) -> Pedido | None:
         return self.session.get(Pedido, order_id)
 
-    def summary(self) -> dict[str, int | Decimal]:
+    def summary(self) -> dict[str, int | float]:
         today = datetime.now(timezone.utc).date()
         counts = {}
         for state in ("PENDIENTE", "EN_PREPARACION", "ENTREGADO", "CANCELADO"):

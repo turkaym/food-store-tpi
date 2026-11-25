@@ -1,7 +1,5 @@
 from datetime import datetime, timezone
-from decimal import Decimal
 
-from sqlalchemy import Column, Numeric
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -30,7 +28,7 @@ class Producto(SQLModel, table=True):
     categoria_id: int = Field(foreign_key="categoria.id")
     nombre: str = Field(index=True, max_length=120)
     descripcion: str = ""
-    precio_base: Decimal = Field(sa_column=Column(Numeric(12, 2), nullable=False))
+    precio_base: float = Field(ge=0)
     imagen_url: str = ""
     stock: int = Field(default=0, ge=0)
     disponible: bool = True
@@ -46,7 +44,7 @@ class Pedido(SQLModel, table=True):
     forma_pago: str
     direccion_entrega: str = Field(min_length=5, max_length=200)
     notas: str | None = None
-    total: Decimal = Field(default=Decimal("0.00"), sa_column=Column(Numeric(12, 2), nullable=False))
+    total: float = Field(default=0.0, ge=0)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     usuario: Usuario = Relationship(back_populates="pedidos")
@@ -59,7 +57,7 @@ class DetallePedido(SQLModel, table=True):
     producto_id: int = Field(foreign_key="producto.id")
     cantidad: int = Field(ge=1)
     nombre_producto: str
-    precio_unitario: Decimal = Field(sa_column=Column(Numeric(12, 2), nullable=False))
-    subtotal: Decimal = Field(sa_column=Column(Numeric(12, 2), nullable=False))
+    precio_unitario: float = Field(ge=0)
+    subtotal: float = Field(ge=0)
     pedido: Pedido = Relationship(back_populates="items")
     producto: Producto = Relationship(back_populates="detalles")

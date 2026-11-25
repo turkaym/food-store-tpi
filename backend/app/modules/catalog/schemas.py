@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from pydantic import Field, HttpUrl
 from sqlmodel import SQLModel
 
@@ -23,7 +21,7 @@ class ProductCreate(SQLModel):
     categoria_id: int
     nombre: str = Field(min_length=1, max_length=120)
     descripcion: str = ""
-    precio_base: Decimal = Field(ge=0)
+    precio_base: float = Field(ge=0)
     imagen_url: str = ""
     stock: int = Field(default=0, ge=0)
     disponible: bool = True
@@ -33,7 +31,7 @@ class ProductUpdate(SQLModel):
     categoria_id: int | None = None
     nombre: str | None = Field(default=None, min_length=1, max_length=120)
     descripcion: str | None = None
-    precio_base: Decimal | None = Field(default=None, ge=0)
+    precio_base: float | None = Field(default=None, ge=0)
     imagen_url: str | None = None
     stock: int | None = Field(default=None, ge=0)
     disponible: bool | None = None
