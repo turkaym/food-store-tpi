@@ -15,7 +15,7 @@ def product_payload(category_id: int, name: str = "Test product") -> dict:
         "categoria_id": category_id,
         "nombre": name,
         "descripcion": "Product description",
-        "precio_base": "15.50",
+        "precio_base": 15.50,
         "imagen_url": "",
         "stock": 8,
         "disponible": True,

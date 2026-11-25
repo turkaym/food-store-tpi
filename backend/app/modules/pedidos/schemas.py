@@ -1,5 +1,4 @@
 from datetime import datetime
-from decimal import Decimal
 from typing import Literal
 
 from pydantic import Field
@@ -25,9 +24,9 @@ class OrderCreate(SQLModel):
 class OrderItemRead(SQLModel):
     producto_id: int
     nombre_producto: str
-    precio_unitario: Decimal
+    precio_unitario: float = Field(ge=0)
     cantidad: int
-    subtotal: Decimal
+    subtotal: float = Field(ge=0)
 
 
 class OrderRead(SQLModel):
@@ -37,7 +36,7 @@ class OrderRead(SQLModel):
     forma_pago: str
     direccion_entrega: str
     notas: str | None
-    total: Decimal
+    total: float = Field(ge=0)
     created_at: datetime
     updated_at: datetime
     items: list[OrderItemRead]
@@ -58,4 +57,4 @@ class OrderSummary(SQLModel):
     entregados: int
     cancelados: int
     pedidos_hoy: int
-    ingresos_entregados: Decimal
+    ingresos_entregados: float = Field(ge=0)
