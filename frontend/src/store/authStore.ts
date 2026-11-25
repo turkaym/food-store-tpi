@@ -1,16 +1,17 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { api } from '@/shared/api'
-import { registerSessionFailureHandler } from '@/shared/session'
-import type { User } from '@/types'
+import { registerSessionFailureHandler } from '@/shared/api'
+import { getSession, login as loginRequest, logout as logoutRequest, register as registerRequest } from '@/features/auth/api'
+import type { RegisterData } from '@/features/auth/types'
+import type { User } from '@/features/usuarios'
 
-type AuthState = { user: User | null; checking: boolean; loading: boolean; login: (username: string, password: string) => Promise<void>; register: (data: { username: string; full_name: string; email: string; password: string }) => Promise<void>; logout: () => Promise<void>; checkSession: () => Promise<void> }
+type AuthState = { user: User | null; checking: boolean; loading: boolean; login: (username: string, password: string) => Promise<void>; register: (data: RegisterData) => Promise<void>; logout: () => Promise<void>; checkSession: () => Promise<void> }
 export const useAuthStore = create<AuthState>()(persist((set) => ({
   user: null, checking: true, loading: false,
-  login: async (username, password) => { set({ loading: true }); try { const body = new URLSearchParams({ username, password }); await api.post('/api/v1/auth/token', body, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }); const { data } = await api.get<User>('/api/v1/auth/me'); set({ user: data }) } finally { set({ loading: false }) } },
-  register: async (data) => { set({ loading: true }); try { await api.post('/api/v1/auth/register', data) } finally { set({ loading: false }) } },
-  logout: async () => { try { await api.post('/api/v1/auth/logout') } finally { set({ user: null }) } },
-  checkSession: async () => { try { const { data } = await api.get<User>('/api/v1/auth/me'); set({ user: data }) } catch { set({ user: null }) } finally { set({ checking: false }) } },
+  login: async (username, password) => { set({ loading: true }); try { set({ user: await loginRequest({ username, password }) }) } finally { set({ loading: false }) } },
+  register: async (data) => { set({ loading: true }); try { await registerRequest(data) } finally { set({ loading: false }) } },
+  logout: async () => { try { await logoutRequest() } finally { set({ user: null }) } },
+  checkSession: async () => { try { set({ user: await getSession() }) } catch { set({ user: null }) } finally { set({ checking: false }) } },
 }), {
   name: 'food-store-auth',
   partialize: (state) => ({ user: state.user }),

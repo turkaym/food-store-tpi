@@ -1,0 +1,3 @@
+import { NavLink, Outlet } from 'react-router-dom'
+
+export function AdminLayout() { return <><div className="mb-8 flex flex-wrap items-end justify-between gap-4"><div><p className="font-bold uppercase tracking-[0.2em] text-orange-600">Operations</p><h1 className="mt-2 text-4xl font-black">Admin workspace</h1></div><nav className="flex flex-wrap gap-2 text-sm font-bold">{[['/admin/resumen', 'Summary'], ['/admin/categorias', 'Categories'], ['/admin/productos', 'Products'], ['/admin/pedidos', 'Orders'], ['/admin/usuarios', 'Users']].map(([to, label]) => <NavLink key={to} to={to} className={({ isActive }) => `rounded-full px-3 py-2 ${isActive ? 'bg-slate-900 text-white' : 'bg-white text-slate-600'}`}>{label}</NavLink>)}</nav></div><Outlet /></> }

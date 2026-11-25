@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Product } from '@/types'
+import type { Product } from '@/features/productos'
 export type CartLine = { product: Product; quantity: number }
 type CartState = { lines: CartLine[]; add: (product: Product) => void; update: (id: number, quantity: number) => void; remove: (id: number) => void; clear: () => void }
 export const useCartStore = create<CartState>()(persist((set) => ({
