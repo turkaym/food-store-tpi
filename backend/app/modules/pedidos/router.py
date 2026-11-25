@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 
 from app.core.deps import get_current_active_user, require_role
 from app.models import Usuario
@@ -19,7 +19,7 @@ def create_order(data: OrderCreate, user: Usuario = Depends(get_current_active_u
 
 
 @router.get("", response_model=OrderPage)
-def list_orders(skip: int = 0, limit: int = 20, estado: str | None = None, user: Usuario = Depends(get_current_active_user), service: OrderService = Depends(get_order_service)):
+def list_orders(skip: int = Query(default=0, ge=0), limit: int = Query(default=20, ge=1, le=100), estado: str | None = None, user: Usuario = Depends(get_current_active_user), service: OrderService = Depends(get_order_service)):
     return service.list(user, skip, limit, estado)
 
 
