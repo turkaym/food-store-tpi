@@ -2,6 +2,11 @@
 
 Food Store is a full-stack ordering application for a small restaurant. Customers can browse the active catalog, keep a persisted cart, place orders, review their order history, and cancel eligible orders. Administrators can manage categories, products, stock, customer accounts, order states, and operational summary data.
 
+## Public Delivery Links
+
+- Public GitHub repository: `https://github.com/turkaym/food-store-tpi`
+- Public 10-15 minute video: `https://drive.google.com/file/d/18gjGltyKD6nJ_FkiW6IfGc-MJ185bmbg/view?usp=sharing`
+
 ## Quick Path
 
 1. Install Python 3.11+, Node.js 20+, and pnpm.
@@ -171,11 +176,6 @@ python -m pytest -q
 - The frontend production bundle reports a Vite warning about a JavaScript chunk larger than 500 kB.
 - The seeded administrator password is a demonstration credential and must be changed for non-local deployment.
 - There is no production deployment infrastructure, password reset, payment processing, image hosting, or automated end-to-end browser suite.
-
-## Public Delivery Links
-
-- Public GitHub repository: `https://github.com/turkaym/food-store-tpi`
-- Public 10-15 minute video: `https://drive.google.com/file/d/18gjGltyKD6nJ_FkiW6IfGc-MJ185bmbg/view?usp=sharing`
 
 ## Delivery Package
 
