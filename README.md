@@ -24,7 +24,7 @@ The backend exposes versioned routes under `/api/v1`. Authentication is cookie-o
 ## Requirements
 
 - Python 3.11 or newer
-- PostgreSQL 14 or newer for the intended database setup
+- PostgreSQL 15 or newer for the intended database setup
 - Node.js 20 or newer
 - pnpm 10 or compatible pnpm version
 
@@ -55,7 +55,7 @@ pnpm install --frozen-lockfile
 Copy-Item .env.example .env
 ```
 
-The frontend template points to the local API at `http://localhost:8000`.
+The frontend template points to the versioned local API at `http://localhost:8000/api/v1`.
 
 ## Environment Variables
 
@@ -75,7 +75,7 @@ The backend has a SQLite fallback of `sqlite:///./foodstore.db` when no `.env` i
 
 | Variable | Purpose | Local example |
 | --- | --- | --- |
-| `VITE_API_URL` | API origin used by Axios | `http://localhost:8000` |
+| `VITE_API_URL` | Versioned API base URL used by Axios | `http://localhost:8000/api/v1` |
 
 Vite exposes `VITE_*` values to the browser. Do not place secrets in the frontend environment.
 
@@ -110,7 +110,7 @@ Start the backend from `backend/`:
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-API documentation is available at `http://localhost:8000/docs`; the OpenAPI document is at `http://localhost:8000/openapi.json`.
+API documentation is available through Swagger UI at `http://localhost:8000/docs` and ReDoc at `http://localhost:8000/redoc`. The OpenAPI document is at `http://localhost:8000/openapi.json`.
 
 Start the frontend from `frontend/`:
 
@@ -152,6 +152,18 @@ pnpm build
 
 The final bounded verification record is maintained in `odd/tasks/tp-integrador-final.md`. It records backend compilation/import/OpenAPI, isolated seed idempotency, frontend installation/type checking/build, and controlled HTTP checks with their limitations.
 
+Create a fresh backend virtual environment and install the runtime and test dependencies from `backend/`:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+`requirements-dev.txt` includes the runtime requirements and pins the test runner used by the project.
+
 ## Known Limitations
 
 - PostgreSQL integration is not claimed unless a real PostgreSQL instance is available during verification.
@@ -162,10 +174,8 @@ The final bounded verification record is maintained in `odd/tasks/tp-integrador-
 
 ## Public Delivery Links
 
-The public links are not available yet and are intentionally left as placeholders:
-
 - Public GitHub repository: `https://github.com/turkaym/food-store-tpi`
-- Public 10-15 minute video: `[PLACEHOLDER: add the public demonstration video URL]`
+- Public 10-15 minute video: `https://drive.google.com/file/d/18gjGltyKD6nJ_FkiW6IfGc-MJ185bmbg/view?usp=sharing`
 
 ## Delivery Package
 
